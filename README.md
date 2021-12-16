@@ -1,1 +1,1 @@
-# sockjs-go-client
+# go-sockjsclient
