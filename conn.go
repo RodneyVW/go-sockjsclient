@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gorilla/websocket"
 )
 
 // Sockjs client connection error messages
@@ -39,6 +40,9 @@ type Conn interface {
 
 	// Close will close the sockjs connection
 	Close() error
+
+	// GetConnection returns the underlying gorilla websocket connection
+	GetConnection() *websocket.Conn
 }
 
 // parseMessage attempts to parse a valid sockjs message from given data

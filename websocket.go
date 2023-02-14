@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -16,17 +17,27 @@ type WSDialer struct {
 	Dialer *websocket.Dialer
 }
 
-func (d *WSDialer) Dial(addr, serverID, sessionID string, hdrs http.Header) (Conn, *http.Response, error) {
-	return d.DialContext(context.Background(), addr, serverID, sessionID, hdrs)
+func (d *WSDialer) Dial(addr, serverID, sessionID string, hdrs http.Header, query map[string]string) (Conn, *http.Response, error) {
+	return d.DialContext(context.Background(), addr, serverID, sessionID, hdrs, query)
 }
 
-func (d *WSDialer) DialContext(ctx context.Context, addr, serverID, sessionID string, hdrs http.Header) (Conn, *http.Response, error) {
+func (d *WSDialer) DialContext(ctx context.Context, addr, serverID, sessionID string, hdrs http.Header, query map[string]string) (Conn, *http.Response, error) {
 	// Parse a valid transport address
 	taddr, err := parseTransportAddr(addr, serverID, sessionID)
 	if err != nil {
 		return nil, nil, err
 	}
 	taddr += "/websocket" // sockjs websocket endpoint
+
+	u := url.URL{}
+	q := u.Query()
+	for key, value := range query {
+		q[key] = append(q[key], value)
+	}
+	encQuery := q.Encode()
+	if len(encQuery) > 0 {
+		taddr += "?" + encQuery
+	}
 
 	// Ensure a dialer is set
 	if d.Dialer == nil {
@@ -239,4 +250,8 @@ func (conn *wsConn) Close() error {
 	}
 
 	return nil
+}
+
+func (conn *wsConn) GetConnection() *websocket.Conn {
+	return conn.conn
 }

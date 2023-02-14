@@ -23,6 +23,9 @@ type Client struct {
 	// Address is the base server address to connection
 	Address string
 
+	// Query parameters will be added after /websocket part of socksjs connect uri
+	Query map[string]string
+
 	// ServerID is the server ID string to be used in generation of the transport address
 	ServerID string
 
@@ -95,6 +98,7 @@ func (c *Client) ConnectContext(ctx context.Context) error {
 			c.ServerID,
 			c.SessionID,
 			c.Header,
+			c.Query,
 		)
 
 		// On success, set and return

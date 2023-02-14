@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/websocket"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -87,7 +88,7 @@ type xhrConn struct {
 	waddr  string           // prepared XHR write endpoint addr
 	cncl   func()           // context cancel
 	in     chan interface{} // inbound data/error channel
-	ctx    context.Context  // conn context
+	ctx    context.Context  // Conn context
 }
 
 // run starts the read loop and handles final error propagation
@@ -249,4 +250,9 @@ func (conn *xhrConn) WriteMsg(data ...[]byte) error {
 func (conn *xhrConn) Close() error {
 	conn.cncl()
 	return nil
+}
+
+func (conn *xhrConn) GetConnection() *websocket.Conn {
+	//TODO implement me
+	panic("implement me")
 }

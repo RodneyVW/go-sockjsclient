@@ -1,4 +1,4 @@
-module github.com/third-light/go-sockjsclient
+module github.com/rodneyvw/go-sockjsclient
 
 go 1.14
 
