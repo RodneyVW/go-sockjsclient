@@ -95,7 +95,7 @@ func (conn *wsConn) run() {
 // readLoop is the main ws read routine, handling passing
 // of inbound messages ready to be received, and heartbeat checks
 func (conn *wsConn) readLoop() error {
-	const timeout = time.Second * 30
+	const timeout = time.Hour * 240 // set connection to long running
 
 	heartbeat := make(chan struct{})
 	timer := time.NewTimer(timeout)
