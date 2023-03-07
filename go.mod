@@ -1,4 +1,4 @@
-module github.com/vwdfive/go-sockjsclient
+module github.com/rodneyVW/go-sockjsclient
 
 go 1.14
 
